@@ -115,4 +115,3 @@ You still need to include a chara.png even when using a card.png!
   dialogue: "Their line."
 },
 ```
->>>>>>> ba10421 (Create README.md)
