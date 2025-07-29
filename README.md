@@ -108,8 +108,6 @@ Use this for card CGs.
 You still need to include a chara.png even when using a card.png!
 
 ```
-Copy
-Edit
 {
   card: "card.png",       // card CG from /card
   png: "chara.png",       // character sprite from /chara (still needed)
