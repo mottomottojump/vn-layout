@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>VN Dialogue</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="enstars.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+</head>
+<body>
+  <div id="background-container"></div>
+  <div id="vn-root">
+    <div class="vn-container active">
+      <div class="vn-png"><img src="" /></div>
+      <div class="vn-box">
+        <div class="vn-name"></div>
+        <div class="vn-text"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="circle-menu">
+  <button class="menu-toggle">☰</button>
+  <div class="menu-items">
+    <button class="menu-item" id="directory-btn">Directory</button>
+    <button class="menu-item" id="home-btn">Home</button>
+    <button class="menu-item" id="settings-btn">Settings</button>
+    <button class="menu-item" id="restart-btn">Restart</button>
+    <button class="menu-item" id="me-btn">Powered by VN-layout</button>
+  </div>
+</div>
+
+<div class="settings-panel" id="settings-panel">
+  <div class="settings-content">
+    <h3>Player Settings</h3>
+    <span class="settings-subtext">Customize your character name and pronouns</span>
+    
+    <div class="setting-group">
+      <label>Your Name:</label>
+      <input type="text" id="player-name">
+    </div>
+    
+    <div class="setting-group">
+      <label>Pronouns:</label>
+      <div class="pronoun-toggles">
+        <button class="pronoun-btn" data-pronoun="she">She/Her</button>
+        <button class="pronoun-btn" data-pronoun="he">He/Him</button>
+        <button class="pronoun-btn" data-pronoun="they">They/Them</button>
+      </div>
+    </div>
+    
+    <button class="save-settings">Save</button>
+  </div>
+</div>
+
+
+  <button id="backCircleBtn">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white">
+      <path d="M15 18l-6-6 6-6"/>
+    </svg>
+  </button>
+
+  <script src="scripts/dialogue.js"></script>
+  <script src="scripts/vn-engine.js"></script>
+  <script src="scripts/restart.js"></script>
+</body>
+<script>
+document.getElementById('home-btn').addEventListener('click', function() {
+  window.open('HOME_URL_HERE', '_blank');
+});
+document.getElementById('directory-btn').addEventListener('click', function() {
+  window.open('DIRECTORY_URL_HERE', '_self');
+});
+document.getElementById('me-btn').addEventListener('click', function() {
+  window.open('ME_URL_HERE', '_self');
+});
+</script>
+</body>
+</html>
