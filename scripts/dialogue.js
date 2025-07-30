@@ -1,8 +1,15 @@
 const dialogues = [
   { 
     bg: "bg.png",
-    png: "chara.png",
+    png: "blank.png",
     name: "Character Name",
-    dialogue: "First message."
+    dialogue: "Message."
+  },
+
+  { 
+    card: "card.png",
+    png: "blank.png",
+    name: "Character Name",
+    dialogue: "Message."
   },
 ];

@@ -1,3 +1,5 @@
+
+
 let playerSettings = {
   name: "Player",
   pronouns: {
@@ -10,32 +12,33 @@ let playerSettings = {
 
 function replacePlaceholders(text) {
   const pronouns = playerSettings.pronouns;
-  
   const replacePreservingCase = (match) => {
     const lowerMatch = match.toLowerCase();
-    const replacement = {
-      '[player]': playerSettings.name,
-      '[she]': pronouns.subjective,
-      '[her]': pronouns.objective,
-      '[hers]': pronouns.possessive,
-      '[herself]': pronouns.reflexive,
-      '[they]': pronouns.subjective,
-      '[them]': pronouns.objective,
-      '[their]': pronouns.possessive,
-      '[theirs]': pronouns.possessive,
-      '[themself]': pronouns.reflexive
-    }[lowerMatch] || match;
-
+    let replacement;
+    if (lowerMatch === '[anzu]') {
+      replacement = playerSettings.name;
+    } else {
+      replacement = {
+        '[she]': pronouns.subjective,
+        '[her]': pronouns.objective,
+        '[hers]': pronouns.possessive,
+        '[herself]': pronouns.reflexive,
+        '[they]': pronouns.subjective,
+        '[them]': pronouns.objective,
+        '[their]': pronouns.possessive,
+        '[theirs]': pronouns.possessive,
+        '[themself]': pronouns.reflexive
+      }[lowerMatch] || match;
+    }
+    // Preserve capitalization of first letter inside brackets
     if (match[1] === match[1].toUpperCase()) {
       return replacement.charAt(0).toUpperCase() + replacement.slice(1);
     }
     return replacement;
   };
-
-  return text.replace(
-    /\[(player|she|her|hers|herself|they|them|their|theirs|themself)\]/gi,
-    replacePreservingCase
-  );
+  // Only replace [anzu] (case-insensitive) and pronoun placeholders
+  const regex = /\[(anzu|she|her|hers|herself|they|them|their|theirs|themself)\]/gi;
+  return text.replace(regex, replacePreservingCase);
 }
 
 function generateDialogues() {
@@ -252,6 +255,10 @@ function showDialogue(index) {
   const vnPng = document.querySelector('.vn-png img');
   if (vnPng && dialogue.png && typeof dialogue.png === 'string' && dialogue.png.trim() !== "") {
     vnPng.src = dialogue.png.startsWith('chara/') ? dialogue.png : `chara/${dialogue.png}`;
+    // Add bounce animation
+    vnPng.classList.remove('bounce-img');
+    void vnPng.offsetWidth; // Force reflow to restart animation
+    vnPng.classList.add('bounce-img');
   }
   document.querySelector('.vn-name').textContent = dialogue.name;
   typewriterEffect(
@@ -260,8 +267,12 @@ function showDialogue(index) {
     15
   );
 
-  const vnContainer = document.querySelector('.vn-container');
+   const vnContainer = document.querySelector('.vn-container');
   let currentMode = dialogue.card ? 'card' : 'bg';
+  // Remove any previous click listeners to avoid stacking
+  const vnBox = vnContainer.querySelector('.vn-box');
+  vnBox.onclick = null;
+
   if (currentMode !== lastMode && (currentMode === 'card' || lastMode === 'card')) {
     bgContainer.style.transition = 'opacity 0.3s ease';
     bgContainer.style.opacity = '0';
@@ -274,11 +285,12 @@ function showDialogue(index) {
         vnContainer.classList.add('centered-card'); 
         vnContainer.querySelector('.vn-png').style.display = 'none';
         vnContainer.querySelector('.vn-box').classList.add('no-triangle');
-        const vnBox = vnContainer.querySelector('.vn-box');
-        vnBox.onclick = () => {
-          vnBox.onclick = null;
-          currentDialogueIndex++;
-          showDialogue(currentDialogueIndex);
+        vnBox.onclick = (e) => {
+          e.stopPropagation();
+          if (currentDialogueIndex < dialogues.length - 1) {
+            currentDialogueIndex++;
+            showDialogue(currentDialogueIndex);
+          }
         };
       } else {
         vnContainer.classList.remove('centered-card');
@@ -301,11 +313,12 @@ function showDialogue(index) {
       vnContainer.classList.add('centered-card'); 
       vnContainer.querySelector('.vn-png').style.display = 'none';
       vnContainer.querySelector('.vn-box').classList.add('no-triangle');
-      const vnBox = vnContainer.querySelector('.vn-box');
-      vnBox.onclick = () => {
-        vnBox.onclick = null;
-        currentDialogueIndex++;
-        showDialogue(currentDialogueIndex);
+      vnBox.onclick = (e) => {
+        e.stopPropagation();
+        if (currentDialogueIndex < dialogues.length - 1) {
+          currentDialogueIndex++;
+          showDialogue(currentDialogueIndex);
+        }
       };
     } else if (dialogue.bg) {
       bgContainer.style.backgroundImage = `url(images/${dialogue.bg})`;
