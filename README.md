@@ -40,11 +40,11 @@ Use this when you want to show a background and a character sprite! REMEMBER `,`
   dialogue: "Their line." // what they say
 },
 ```
-```
+
 ### 🔹 Card Scene
 
 Use this for card CGs — you still need a chara PNG even with a card image!
-
+```
 {
   card: "card.png",       // from /card
   png: "chara.png",       // still needed from /chara
