@@ -43,7 +43,6 @@ Use this when you want to show a background and a character sprite.
 {
   bg: "bg.png",           // background from /images
   png: "chara.png",       // character sprite from /chara
->>>>>>> ba10421 (Create README.md)
   name: "Character Name", // who’s speaking
   dialogue: "Their line." // what they say
 },
@@ -59,9 +58,9 @@ Use this for card CGs — you still need a chara PNG even with a card image!
   name: "Character Name", 
   dialogue: "Their line."
 },
+```
 
 → To change "Home" and "Directory" in the menu bar, go to `index.html` and below script change the urls!
-```
 
 
 
