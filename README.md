@@ -32,15 +32,15 @@ Put your files in the right place so they show up properly:
 ### 🔹 Normal Scene
 
 Use this when you want to show a background and a character sprite! REMEMBER `,` AFTER EVERY LINE!
-
+```
 {
   bg: "bg.png",           // from /images
   png: "chara.png",       // from /chara
   name: "Character Name", // who’s speaking
   dialogue: "Their line." // what they say
 },
-
-
+```
+```
 ### 🔹 Card Scene
 
 Use this for card CGs — you still need a chara PNG even with a card image!
@@ -53,7 +53,7 @@ Use this for card CGs — you still need a chara PNG even with a card image!
 },
 
 → To change "Home" and "Directory" in the menu bar, go to `index.html` and below script change the urls!
-
+```
 
 
 
