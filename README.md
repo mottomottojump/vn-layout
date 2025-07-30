@@ -1,4 +1,3 @@
-=======
 # 📘 VN Layout
 
 This is a simple layout tool to help format visual novel-style translations using basic CSS + JS.
@@ -9,11 +8,6 @@ It gives you a clean layout with character names, dialogue boxes, background ima
 
 ## 📦 How to Use
 
-1. **Download or clone this repo**
-2. **Only edit the dialogue and character names** don't touch anything else! (super important!)
-3. Add your images to the right folders (see below)
-4. Start writing your translations using the format shown below
-=======
 1. **Download or clone this repository**
 2. **Only edit the `dialogue.js` file and `index.html` for links.**  
    ❗ **Do not change anything else** — very important!
