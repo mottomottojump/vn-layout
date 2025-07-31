@@ -10,6 +10,7 @@ const dialogues = [
     card: "card.png",
     png: "blank.png",
     name: "Character Name",
-    dialogue: "Message."
+    dialogue: "Message.",
+    end: true
   },
 ];

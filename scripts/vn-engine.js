@@ -336,7 +336,18 @@ function showDialogue(index) {
   if (backBtn) {
     backBtn.style.display = currentDialogueIndex > 0 ? 'flex' : 'none';
   }
+
+    if (dialogues[index]?.end) {
+    document.getElementById("final-next-button").style.display = "block";
+  } else {
+    document.getElementById("final-next-button").style.display = "none";
+  }
 }
+
+// Add click handler for the special button
+document.getElementById("final-next-button").addEventListener("click", function() {
+  document.getElementById("end-popup").style.display = "flex";
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   generateDialogues();
@@ -361,6 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
 
 function handleOrientation() {
   const warning = document.createElement('div');
