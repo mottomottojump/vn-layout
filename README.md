@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # VN Layout
 
 This is a simple tool to help you format translations using CSS + JS.  
