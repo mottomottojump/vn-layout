@@ -1,68 +1,41 @@
-
-
 let playerSettings = {
-  name: "Player",
-  pronouns: {
-    subjective: "she",
-    objective: "her",
-    possessive: "hers",
-    reflexive: "herself"
-  }
+  name: "Anzu"
 };
 
 function replacePlaceholders(text) {
-  const pronouns = playerSettings.pronouns;
   const replacePreservingCase = (match) => {
     const lowerMatch = match.toLowerCase();
-    let replacement;
     if (lowerMatch === '[anzu]') {
-      replacement = playerSettings.name;
-    } else {
-      replacement = {
-        '[she]': pronouns.subjective,
-        '[her]': pronouns.objective,
-        '[hers]': pronouns.possessive,
-        '[herself]': pronouns.reflexive,
-        '[they]': pronouns.subjective,
-        '[them]': pronouns.objective,
-        '[their]': pronouns.possessive,
-        '[theirs]': pronouns.possessive,
-        '[themself]': pronouns.reflexive
-      }[lowerMatch] || match;
+      return playerSettings.name;
     }
-    // Preserve capitalization of first letter inside brackets
-    if (match[1] === match[1].toUpperCase()) {
-      return replacement.charAt(0).toUpperCase() + replacement.slice(1);
-    }
-    return replacement;
+    return match;
   };
-  // Only replace [anzu] (case-insensitive) and pronoun placeholders
-  const regex = /\[(anzu|she|her|hers|herself|they|them|their|theirs|themself)\]/gi;
+  const regex = /\[anzu\]/gi;
   return text.replace(regex, replacePreservingCase);
 }
 
 function generateDialogues() {
   const root = document.getElementById('vn-root');
-  root.innerHTML = ''; // Clear existing content first
-  
-dialogues.forEach(d => {
-  let vnPngHtml = '';
-  if (d.png && typeof d.png === 'string' && d.png.trim() !== "") {
-    const charaImage = d.png.startsWith('chara/') ? d.png : `chara/${d.png}`;
-    vnPngHtml = `<div class="vn-png"><img src="${charaImage}" alt=""></div>`;
-  }
-  root.innerHTML += `
-  <div class="vn-container">
-    ${vnPngHtml}
-    <div class="vn-box">
-      <div class="vn-name">${d.name}</div>
-      <div class="vn-text" data-original="${d.dialogue.replace(/"/g, '&quot;')}">
-        ${replacePlaceholders(d.dialogue)}
+  root.innerHTML = '';
+
+  dialogues.forEach(d => {
+    let vnPngHtml = '';
+    if (d.png && typeof d.png === 'string' && d.png.trim() !== "") {
+      const charaImage = d.png.startsWith('chara/') ? d.png : `chara/${d.png}`;
+      vnPngHtml = `<div class="vn-png"><img src="${charaImage}" alt=""></div>`;
+    }
+    root.innerHTML += `
+      <div class="vn-container">
+        ${vnPngHtml}
+        <div class="vn-box">
+          <div class="vn-name">${d.name}</div>
+          <div class="vn-text" data-original="${d.dialogue.replace(/"/g, '&quot;')}">
+            ${replacePlaceholders(d.dialogue)}
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  `;
-});
+    `;
+  });
 }
 
 
@@ -140,7 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
         case 'Settings':
           document.querySelector('.settings-panel').style.display = 'flex';
           document.getElementById('player-name').value = playerSettings.name;
-          initPronounButtons();
           break;
         case 'Home':
           break;
@@ -150,25 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  function initPronounButtons() {
-    const current = playerSettings.pronouns.subjective;
-    document.querySelectorAll('.pronoun-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.pronoun === current);
-    });
-  }
-
-  document.querySelectorAll('.pronoun-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const pronoun = btn.dataset.pronoun;
-      playerSettings.pronouns = pronoun === 'he' ? 
-        { subjective: 'he', objective: 'him' } :
-        pronoun === 'they' ? 
-        { subjective: 'they', objective: 'them' } :
-        { subjective: 'she', objective: 'her' };
-      
-      initPronounButtons();
-    });
-  });
 
   document.querySelector('.save-settings')?.addEventListener('click', () => {
     playerSettings.name = document.getElementById('player-name').value.trim() || "Player";
@@ -233,19 +186,20 @@ document.querySelector('.save-settings').addEventListener('click', () => {
 const bgContainer = document.getElementById('background-container');
 
 let typewriterTimeout;
-function typewriterEffect(element, text, speed = 30) {
+function typewriterEffect(element, text, speed = 15, step = 2) {
   if (typewriterTimeout) clearTimeout(typewriterTimeout);
   element.textContent = "";
   let i = 0;
   function type() {
     if (i < text.length) {
-      element.textContent += text.charAt(i);
-      i++;
+      element.textContent += text.slice(i, i + step);
+      i += step;
       typewriterTimeout = setTimeout(type, speed);
     }
   }
   type();
 }
+
 
 let lastMode = null;
 function showDialogue(index) {
@@ -278,8 +232,25 @@ function showDialogue(index) {
     bgContainer.style.opacity = '0';
     setTimeout(() => {
       if (dialogue.card) {
-        bgContainer.style.backgroundImage = `url(card/${dialogue.card})`;
-        bgContainer.style.filter = 'none';
+const isVideo = dialogue.card?.endsWith('.mp4');
+const isGif = dialogue.card?.endsWith('.gif');
+
+if (isVideo || isGif) {
+  bgContainer.innerHTML = `
+    <video autoplay muted loop playsinline style="width:100%; height:100%; object-fit:cover;">
+      <source src="card/${dialogue.card}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  `;
+  bgContainer.style.backgroundImage = '';
+  bgContainer.style.filter = 'none';
+  bgContainer.style.backgroundColor = 'transparent';
+} else {
+  bgContainer.innerHTML = ''; // remove any video
+  bgContainer.style.backgroundImage = `url(card/${dialogue.card})`;
+  bgContainer.style.filter = 'none';
+  bgContainer.style.backgroundColor = 'transparent';
+}        bgContainer.style.filter = 'none';
         bgContainer.style.backgroundColor = 'transparent';
         vnContainer.style.display = 'flex'; 
         vnContainer.classList.add('centered-card'); 
@@ -306,6 +277,37 @@ function showDialogue(index) {
     }, 150);
   } else {
     if (dialogue.card) {
+        const isVideo = dialogue.card.endsWith('.mp4');
+  const isGif = dialogue.card.endsWith('.gif');
+
+  bgContainer.innerHTML = isVideo
+    ? `<video autoplay muted loop playsinline style="width:100%; height:100%; object-fit:cover;">
+         <source src="card/${dialogue.card}" type="video/mp4">
+       </video>`
+    : isGif
+    ? `<img src="card/${dialogue.card}" style="width:100%; height:100%; object-fit:cover;">`
+    : ''; // fallback for static image
+
+  if (!isVideo && !isGif) {
+    bgContainer.style.backgroundImage = `url(card/${dialogue.card})`;
+  } else {
+    bgContainer.style.backgroundImage = '';
+  }
+
+  bgContainer.style.filter = 'none';
+  bgContainer.style.backgroundColor = 'transparent';
+  vnContainer.style.display = 'flex';
+  vnContainer.classList.add('centered-card');
+  vnContainer.querySelector('.vn-png').style.display = 'none';
+  vnContainer.querySelector('.vn-box').classList.add('no-triangle');
+
+  vnBox.onclick = (e) => {
+    e.stopPropagation();
+    if (currentDialogueIndex < dialogues.length - 1) {
+      currentDialogueIndex++;
+      showDialogue(currentDialogueIndex);
+    }
+  };
       bgContainer.style.backgroundImage = `url(card/${dialogue.card})`;
       bgContainer.style.filter = 'none';
       bgContainer.style.backgroundColor = 'transparent';
@@ -321,6 +323,15 @@ function showDialogue(index) {
         }
       };
     } else if (dialogue.bg) {
+        bgContainer.innerHTML = '';
+        bgContainer.style.backgroundImage = `url(images/${dialogue.bg})`;
+  bgContainer.style.filter = 'blur(2.5px) brightness(0.6)';
+  bgContainer.style.backgroundColor = 'rgba(16, 16, 16, 0.8)';
+  vnContainer.style.display = 'flex';
+  bgContainer.onclick = null;
+    vnContainer.classList.remove('centered-card');
+  vnContainer.querySelector('.vn-png').style.display = '';
+  vnContainer.querySelector('.vn-box').classList.remove('no-triangle');
       bgContainer.style.backgroundImage = `url(images/${dialogue.bg})`;
       bgContainer.style.filter = 'blur(2.5px) brightness(0.6)';
       bgContainer.style.backgroundColor = 'rgba(16, 16, 16, 0.8)';
@@ -336,7 +347,18 @@ function showDialogue(index) {
   if (backBtn) {
     backBtn.style.display = currentDialogueIndex > 0 ? 'flex' : 'none';
   }
+
+    if (dialogues[index]?.end) {
+    document.getElementById("final-next-button").style.display = "block";
+  } else {
+    document.getElementById("final-next-button").style.display = "none";
+  }
 }
+
+// Add click handler for the special button
+document.getElementById("final-next-button").addEventListener("click", function() {
+  document.getElementById("end-popup").style.display = "flex";
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   generateDialogues();
@@ -361,6 +383,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
 
 function handleOrientation() {
   const warning = document.createElement('div');
@@ -450,7 +473,6 @@ if (dialogue.card) {
   textEl.textContent = replacePlaceholders(dialogue.dialogue);
 }
 
-// Only bounce if not in card mode
 if (!dialogue.card) {
   const vnBox = document.querySelector('.vn-box');
   vnBox.classList.add('bounce');

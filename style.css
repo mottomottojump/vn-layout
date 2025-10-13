@@ -1,3 +1,67 @@
+.glass-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.glass-arrow {
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+
+.glass-button:hover .glass-arrow {
+  transform: translateX(3px);
+}
+
+#final-next-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 24px;
+  background: rgba(24, 39, 154, 0.65); /* Semi-transparent blue */
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  display: none;
+  z-index: 1000;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+  inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  
+  transition: all 0.3s ease;
+}
+
+#final-next-button::after {
+  content: "→";
+  margin-left: 8px;
+  font-weight: bold;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+#final-next-button:hover::after {
+  transform: translateX(3px);
+}
+
+/* Pulsing animation for attention */
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 0 0 rgba(100, 140, 255, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(100, 140, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(100, 140, 255, 0); }
+}
+
+#final-next-button.pulse {
+  animation: pulse-glow 2s infinite;
+}
+
 .bounce-img {
   animation: bounce-img-appear 0.28s cubic-bezier(.68,-0.55,.27,1.55);
 }
@@ -89,6 +153,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Inter', 'Noto Sans JP', sans-serif;
+  font-weight: bold;
   color: #fff;
   min-height: 100vh;
   display: flex;
@@ -157,7 +222,7 @@ body {
   line-height: 1.8;
   box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7);
   padding: 2em;
-  line-height: 30px;
+  line-height: 25px;
 }
 
 
